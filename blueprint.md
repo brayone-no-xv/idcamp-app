@@ -1,23 +1,23 @@
-# Project Blueprint
+# Blueprint
 
 ## Overview
 
-A Flutter application with a login screen.
+This is a Flutter application that serves as a dashboard with interactive features and a modern design. It includes a theme toggle for light and dark modes, statistics cards, a performance chart, and social media buttons.
 
-## Style, Design, and Features
+## Style and Design
 
-### Initial Version
+*   **Theming:** The application uses a centralized theme management system with `provider`. It features distinct light and dark themes with a consistent color scheme and typography.
+*   **Fonts:** `google_fonts` is used to apply custom fonts (`Oswald` for headings, `Roboto` for titles, and `Open Sans` for body text).
+*   **Components:**
+    *   **App Bar:** A custom app bar with a title and a theme toggle button.
+    *   **Stat Cards:** Cards with elevation and rounded corners to display key statistics. Icons are used to visually represent the data.
+    *   **Chart:** A line chart from the `fl_chart` package to visualize data trends. The chart has a gradient fill and curved lines for a modern look.
+    *   **Social Buttons:** Circular buttons with a "glow" effect, achieved with a `BoxShadow`. Each button has a distinct color associated with the social media platform it represents.
 
-*   A simple login screen with email and password fields.
-*   A login button.
-*   Placeholders for social login buttons.
+## Features
 
-## Current Plan
-
-*   **Task:** Debug and improve the login screen.
-*   **Steps:**
-    1.  Add the `font_awesome_flutter` dependency to `pubspec.yaml`.
-    2.  Replace the placeholder social login `Container` widgets with the `_buildSocialButton` widget.
-    3.  Use icons from `font_awesome_flutter` for the social login buttons (Google, Apple, Facebook).
-    4.  Improve the overall styling and layout of the login screen for a more modern and polished look.
-    5.  Update the `AppBar` to have a more descriptive title.
+*   **Theme Toggle:** Users can switch between light and dark modes.
+*   **Dashboard:** The main screen displays a dashboard with:
+    *   **Statistics:** Cards showing follower count, likes, and posts.
+    *   **Performance Chart:** A chart visualizing performance data over a period.
+    *   **Social Media Links:** Buttons to link to various social media platforms.
