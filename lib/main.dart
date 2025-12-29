@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp/home.dart';
+import 'package:myapp/dashboard.dart';
+import 'package:myapp/profile.dart';
+import 'package:myapp/settings.dart';
+import 'package:myapp/login.dart';
+import 'package:myapp/gallery.dart';
+import 'package:myapp/notes.dart';
+import 'package:myapp/about.dart';
+import 'package:myapp/status.dart';
+import 'package:myapp/detail.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -107,6 +116,17 @@ class MyApp extends StatelessWidget {
           darkTheme: darkTheme,
           themeMode: themeProvider.themeMode,
           home: const HomeScreen(),
+          routes: {
+            '/home': (context) => const HomeScreen(),
+            '/dashboard': (context) => const DashboardScreen(),
+            '/profile': (context) => const ProfileScreen(),
+            '/settings': (context) => const SettingsScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/gallery': (context) => const GalleryScreen(),
+            '/notes': (context) => const NotesScreen(),
+            '/about': (context) => const AboutScreen(),
+            '/status': (context) => const StatusScreen(),
+          },
         );
       },
     );

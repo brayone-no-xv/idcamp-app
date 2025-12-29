@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class GalleryScreen extends StatefulWidget {
+class GalleryScreen extends StatelessWidget {
   const GalleryScreen({super.key});
 
-  @override
-  State<GalleryScreen> createState() => _GalleryScreenState();
-}
-
-class _GalleryScreenState extends State<GalleryScreen> {
   // A list of maps representing the image data for the gallery
-  final List<Map<String, dynamic>> _galleryItems = [
+  final List<Map<String, dynamic>> _galleryItems = const [
     {
       'imageUrl': 'https://picsum.photos/id/1015/600/400',
       'title': 'Mountain Landscape',
@@ -41,7 +36,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       'title': 'Abstract Waves',
       'description': 'Colorful abstract wave patterns.',
     },
-     {
+    {
       'imageUrl': 'https://picsum.photos/id/10/600/400',
       'title': 'Morning Mist',
       'description': 'A forest covered in a thick layer of mist.',
@@ -70,8 +65,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(12.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Display two items per row
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _getCrossAxisCount(context), // Responsive grid
           crossAxisSpacing: 12.0,
           mainAxisSpacing: 12.0,
           childAspectRatio: 0.75, // Adjust for better item proportions
@@ -79,14 +74,29 @@ class _GalleryScreenState extends State<GalleryScreen> {
         itemCount: _galleryItems.length,
         itemBuilder: (context, index) {
           final item = _galleryItems[index];
-          return _buildGalleryCard(
-            imageUrl: item['imageUrl'],
-            title: item['title'],
-            description: item['description'],
+          return GestureDetector(
+            onTap: () => _showImageDialog(context, item),
+            child: _buildGalleryCard(
+              imageUrl: item['imageUrl'],
+              title: item['title'],
+              description: item['description'],
+            ),
           );
         },
       ),
     );
+  }
+
+  // Helper method to get responsive grid count based on screen width
+  int _getCrossAxisCount(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    if (width > 1200) {
+      return 4; // Large screens
+    } else if (width > 800) {
+      return 3; // Medium screens
+    } else {
+      return 2; // Small screens
+    }
   }
 
   // A widget to build each card in the gallery
@@ -97,7 +107,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }) {
     return Card(
       elevation: 4,
-      clipBehavior: Clip.antiAlias, // Ensures the image respects the card's border radius
+      clipBehavior:
+          Clip.antiAlias, // Ensures the image respects the card's border radius
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -113,7 +124,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   child: CircularProgressIndicator(
                     value: loadingProgress.expectedTotalBytes != null
                         ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
+                              loadingProgress.expectedTotalBytes!
                         : null,
                   ),
                 );
@@ -156,6 +167,96 @@ class _GalleryScreenState extends State<GalleryScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  // Method to show image dialog when tapped
+  void _showImageDialog(BuildContext context, Map<String, dynamic> item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Image
+                Flexible(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
+                    child: Image.network(
+                      item['imageUrl'],
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: Icon(
+                              Icons.error,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                // Content
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['title'],
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        item['description'],
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

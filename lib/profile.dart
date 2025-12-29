@@ -21,6 +21,8 @@ class ProfileScreen extends StatelessWidget {
               _buildStats(context),
               const SizedBox(height: 24),
               _buildMenuList(context),
+              const SizedBox(height: 32),
+              _buildNavigationButtons(context),
             ],
           ),
         ),
@@ -101,6 +103,61 @@ class ProfileScreen extends StatelessWidget {
       title: Text(title, style: TextStyle(color: color)),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
+    );
+  }
+
+  Widget _buildNavigationButtons(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              'Navigation Options',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back),
+                    label: const Text('Go Back'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/home',
+                      (route) => false,
+                    ),
+                    icon: const Icon(Icons.home),
+                    label: const Text('Home'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+                icon: const Icon(Icons.dashboard),
+                label: const Text('Go to Dashboard'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
